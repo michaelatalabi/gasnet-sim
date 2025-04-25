@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  sim:
+    build:
+      context: ../docker
+      dockerfile: omnet.Dockerfile
+    volumes:
+      - ../configs:/workspace/configs
+      - ../output:/workspace/output
+    command: >
+      opp_run -n "/inet/src:/Simu5G/src:/workspace/configs"
+      -l /inet/src/libINET.so configs/omnetpp.ini
+  uav:
+    build:
+      context: ../docker
+      dockerfile: airsim.Dockerfile
+    volumes:
+      - ../configs/airsim_settings.json:/root/.config/AirSim/settings.json:ro
+    networks:
+      default:
+        aliases: [uav]
